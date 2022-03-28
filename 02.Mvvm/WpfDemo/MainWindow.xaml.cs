@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfDemo.MvvmCore;
 
 namespace WpfDemo
 {
@@ -22,10 +23,20 @@ namespace WpfDemo
     {
         public MainWindow()
         {
+            var command = new RelayCommand(DoSth, CanDoSth);
+            DataContext = new CommandViewModel(command);
             InitializeComponent();
         }
 
-        private void ButtonAddName_Click(object sender, RoutedEventArgs e)
+        private bool CanDoSth(object obj)
+        {
+            if (cbDisable?.IsChecked != null)
+                return !cbDisable.IsChecked.Value;
+            else
+                return true;
+        }
+
+        private void DoSth(object obj)
         {
             if (!string.IsNullOrWhiteSpace(txtName.Text) && !lstNames.Items.Contains(txtName.Text))
             {
@@ -33,5 +44,6 @@ namespace WpfDemo
                 txtName.Clear();
             }
         }
+
     }
 }
